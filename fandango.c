@@ -34,11 +34,9 @@ void fandango() {
 	si_meminfo(&si);
 	void* ptr = random_pointer();
 	int data = (int)frandom();
-	printk("Page offset is %p and data is at %p physically \n",PAGE_OFFSET,virt_to_phys(&data));
-	printk("Max pointer is %p\n",si.totalram << PAGE_SHIFT);
-	printk("(Dancing on pointer %p (virtually %p) with the number %d\n",ptr,phys_to_virt(ptr),data);
-	while(i < 100000) {
-	  *((int*)phys_to_virt(ptr++)) = data; //the business end of the fandango! Chose a chunk of memory and wipe it out!
+	printk(KERN_CRIT,"Fandango: Dancing on pointer %p (virtually %p) with the number %d\n",ptr,phys_to_virt(ptr),data);
+	while(i < 1024) {
+	  *((int*)phys_to_virt(ptr++)) = (char)data; //the business end of the fandango! Chose a chunk of memory and wipe it out!
 	}
 }
 
@@ -47,15 +45,14 @@ int init()
 	struct sysinfo si;
 	int i;//for for loop
 	si_meminfo(&si);
-	printk("Fandango module reporting for duty and ready to DANCE!\n");
-	printk("Or not as it's not written yet. Though there is %ld bytes of memory here!\n",si.totalram << PAGE_SHIFT);
+	printk(KERN_INFO,"Fandango module reporting for duty and ready to DANCE!\n");
 	fandango();
 	return 0;
 }
 
 void cleanup()
 {
-  printk("Fandango module sitting down for a rest. (unloading)\n");
+  printk(KERN_INFO,"Fandango module sitting down for a rest. (unloading)\n");
 }
 
 module_init(init);
