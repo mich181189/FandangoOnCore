@@ -9,7 +9,7 @@
 #define __KERNEL__         /* We're part of the kernel */
 #define MODULE             /* Not a permanent part, though. */
 
-#include <linux/modversions.h> 
+#include <config/modversions.h> 
 #include <linux/module.h>  
 #include <linux/tty.h>
 
@@ -17,6 +17,7 @@ int init()
 {
 	printk("Fandango module reporting for duty and ready to DANCE!\n");
 	printk("Or not as it's not written yet.\n");
+	return 0;
 }
 
 void cleanup()
