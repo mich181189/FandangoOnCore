@@ -5,18 +5,42 @@
 ** Note: The purpose of this IS to take down the machine if an app crashes!
 **
 */
-
-#define __KERNEL__         /* We're part of the kernel */
-#define MODULE             /* Not a permanent part, though. */
-
 #include <config/modversions.h> 
 #include <linux/module.h>  
-#include <linux/tty.h>
+#include <linux/mm.h> // for si_meminfo
+#include <asm/page.h> //for PAGE_SHIFT
+#include <linux/random.h> //for get_random_bytes
+
+long frandom() {
+      long val;
+      get_random_bytes(&val,sizeof(long));
+      return val;
+}
+
+void* random_pointer() {
+	struct sysinfo si;
+	si_meminfo(&si);
+	void* ptr = si.totalram << PAGE_SHIFT;
+	ptr = frandom() % (long)ptr;
+	return ptr;
+}
+
+void fandango() {
+	void* ptr = random_pointer();
+	int data = (int)frandom();
+	printk("Dancing on pointer %p with the number %d\n",ptr,data);
+	*((int*)ptr) = data; //the business end of the fandango!
+}
 
 int init()
 {
+	struct sysinfo si;
+	int i;//for for loop
+	si_meminfo(&si);
 	printk("Fandango module reporting for duty and ready to DANCE!\n");
-	printk("Or not as it's not written yet.\n");
+	printk("Or not as it's not written yet. Though there is %ld bytes of memory here!\n",si.totalram << PAGE_SHIFT);
+	for(i=0;i<10000;i++)
+	  fandango();
 	return 0;
 }
 
