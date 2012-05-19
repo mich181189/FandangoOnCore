@@ -22,18 +22,20 @@ void* random_pointer() {
 	struct sysinfo si;
 	si_meminfo(&si);
 	void* ptr = si.totalram << PAGE_SHIFT;
-	ptr = frandom() % (long)ptr;
+	ptr = (long)frandom() % (long)ptr;
 	return ptr;
 }
 
 void fandango() {
 	int num = 5;
+	struct sysinfo si;
+	si_meminfo(&si);
 	void* ptr = random_pointer();
 	int data = (int)frandom();
-	printk("Example pointers are %p, %p, and %p\n",&data,&ptr,&num);
 	printk("Page offset is %p and data is at %p physically \n",PAGE_OFFSET,virt_to_phys(&data));
+	printk("Max pointer is %p\n",si.totalram << PAGE_SHIFT);
 	printk("(would) Dancing on pointer %p (virtually %p) with the number %d\n",ptr,phys_to_virt(ptr),data);
-	*((int*)phys_to_virt(ptr)) = data; //the business end of the fandango!
+	//*((int*)phys_to_virt(ptr)) = data; //the business end of the fandango!
 }
 
 int init()
