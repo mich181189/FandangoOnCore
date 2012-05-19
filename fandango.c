@@ -13,13 +13,21 @@
 #include <linux/module.h>  
 #include <linux/tty.h>
 
-int init_module()
+int init()
 {
-	console_print("Fandango module reporting for duty and ready to DANCE!\n");
-	console_print("Or not as it's not written yet.\n");
+	printk("Fandango module reporting for duty and ready to DANCE!\n");
+	printk("Or not as it's not written yet.\n");
 }
 
-void cleanup_module()
+void cleanup()
 {
-  console_print("Fandango module sitting down for a rest. (unloading)\n");
+  printk("Fandango module sitting down for a rest. (unloading)\n");
 }
+
+module_init(init);
+module_exit(cleanup);
+
+MODULE_AUTHOR("Michael Cullen");
+MODULE_LICENSE("GPL");
+MODULE_VERSION("1:0.0") ;
+MODULE_DESCRIPTION("Make application crashes more fun!");
