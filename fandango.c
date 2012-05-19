@@ -22,7 +22,7 @@ void* random_pointer() {
 	struct sysinfo si;
 	si_meminfo(&si);
 	void* ptr = si.totalram << PAGE_SHIFT;
-	ptr = (long)frandom() % (unsigned long)ptr;
+	ptr = ((long)frandom() % (unsigned long)(ptr-33554432))+33554432; //as in, 0x2000000 in hex. Seems to work as an offset.
 	return ptr;
 }
 
