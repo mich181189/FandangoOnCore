@@ -86,7 +86,7 @@ int init()
 	printk(KERN_INFO,"Fandango module reporting for duty and ready to DANCE!\n");
 
 	//setup proc
-	proc_create("fandango",0,NULL,&proc_fops);
+	proc_create("fandango",0666,NULL,&proc_fops);
 
 	return 0;
 }
