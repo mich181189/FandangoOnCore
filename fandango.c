@@ -88,7 +88,6 @@ int init()
 	//setup proc
 	proc_create("fandango",0,NULL,&proc_fops);
 
-	//fandango();
 	return 0;
 }
 
